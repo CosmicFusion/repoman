@@ -328,6 +328,14 @@ class EditDialog(Gtk.Dialog):
 
         self.parent = parent
 
+        code_only: bool = False
+        if not repo.repolib.util.SourceType.BINARY in source.types:
+            if source.file:
+                for source in source.file.sources:
+                    if repo.repolib.util.compare_sources(source, source, ['Type']):
+                        code_only = True
+        
+
         self.props.resizable = False
 
         content_area = self.get_content_area()
@@ -420,6 +428,20 @@ class EditDialog(Gtk.Dialog):
         action_area.add(separator2)
         separator2.show()
         action_area.props.layout_style = Gtk.ButtonBoxStyle.START
+
+        self.code_only_tooltip = Gtk.Tooltip()
+        self.code_only_tooltip.set_text(_(
+            'This source currently only has source-code enabled, so source code '
+            'cannot be disabled.'
+        ))
+
+        if code_only:
+            self.source_switch.set_sensitive(False)
+            self.source_switch.set_tooltip_text(_(
+                'This source doesn\'t have a Packages repository, so Source-Code '
+                'cannot be disabled for this source.'
+            ))
+            
 
         self.show_all()
 
