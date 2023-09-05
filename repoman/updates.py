@@ -31,11 +31,6 @@ class Updates(Gtk.Box):
 
     distro_codename = repo.get_os_codename()
     os_name = repo.get_os_name()
-    repo_descriptions = {
-        f'{distro_codename}-security': _('Important security updates'),
-        f'{distro_codename}-updates': _('Recommended updates'),
-        f'{distro_codename}-backports': _('Unsupported updates')
-    }
 
     def __init__(self, parent):
         Gtk.Box.__init__(self, False, 0)
@@ -190,7 +185,7 @@ class Updates(Gtk.Box):
     def on_suite_toggled(self, switch, state):
         """ state-set handler for suite switches. """
         suites = self.system_repo.suites
-        if state:
+        if state:repo_descriptions
             if switch.suite not in suites:
                 suites.append(switch.suite)
         else:
